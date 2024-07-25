@@ -19,7 +19,7 @@ public class JavaApplication2 {
      * @param args the command line arguments
      */
     private static List<persona> personas = new ArrayList<>();
-    private static List<Pabellon> pabellons = new ArrayList<>();
+    private static List<pabellon> pabellones = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
         // TODO code application logic here
@@ -34,6 +34,8 @@ public class JavaApplication2 {
                     registroPersona("oficio varios");
                 }else if (Integer.parseInt(select) == 4) {
                     registroPabellon();
+                }else if (Integer.parseInt(select) == 5) {
+                    asignarPabellon();
                 }else if (Integer.parseInt(select) == 6) {
                     break;
                 } else {
@@ -41,14 +43,19 @@ public class JavaApplication2 {
                 }
         }
     }
-    public static void registroPabellon(){
+    
+        public static void registroPabellon(){
         System.out.println("Ingrese la cantidad de Medicos/enfermeros");
         int cantMedicos = Integer.parseInt(scanner.nextLine());
         System.out.println("Ingrese la cantidad de oficios Varios");
         int cantOficios = Integer.parseInt(scanner.nextLine());
         System.out.println("Ingrese la cantidad de pacientes");
         int cantPacientes = Integer.parseInt(scanner.nextLine());
-        pabellon pabellon1 = new pabellon(cantMedicos, cantOficios, cantPacientes);        
+        pabellon pabellon1 = new pabellon(cantMedicos, cantOficios, cantPacientes);
+        System.out.println("Ingrese el nombre del pabellon");
+        pabellon1.setNombreSector(scanner.nextLine());
+        pabellones.add(pabellon1);
+        mensajeAgregado();
     }
     
     public static void registroPersona(String tipo){
@@ -74,6 +81,9 @@ public class JavaApplication2 {
             persona1.setSalario(Double.parseDouble(scanner.nextLine()));
         }
         personas.add(persona1);
+        mensajeAgregado();
+    }
+    public static void mensajeAgregado(){
         System.out.println("Agregado correctamente");
         try {
             // Pausar la ejecución por 1000 milisegundos (1 segundo)
@@ -92,4 +102,31 @@ public class JavaApplication2 {
             return 0;
         }
     }
-}
+    
+    public static void asignarPabellon(){
+        if(pabellones.size()>0){
+            System.out.println("Ingrese el nombre del pabellon");
+            int pb = indexPabellon(scanner.nextLine());
+            if(pb >= 0){
+                System.out.println(pabellones.get(pb).getNombreSector());
+            }else{
+                System.out.println("Pabellon no existe");
+                asignarPabellon();
+            }
+        }else{
+            System.out.println("No hay Pabellones por asignar");
+        }
+    }
+    
+    public static int indexPabellon(String nombre){
+         int index = 0;
+        for (pabellon pabellon : pabellones) {
+            if (pabellon.getNombreSector().equalsIgnoreCase(nombre)) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+    }
+    
