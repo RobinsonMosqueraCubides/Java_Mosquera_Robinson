@@ -16,10 +16,29 @@ public class persona {
     private String fechaNacimiento;
     private String direccion;
     private String fechaIngreso;
+    private String identificacion;
+    private double salario;
     private int edad;
     
     //Constructor vacio
     public persona(){}
+    
+    
+    // Getter y Setter para identificacion
+    public String getIdentificacion(){
+        return identificacion;
+    }
+    public void setIdentificacion(String identificacion){
+        this.identificacion = identificacion;
+    }
+    
+    // Getter y Setter para salario
+    public double getSalario(){
+        return salario;
+    }
+    public void setSalario(double salario){
+        this.salario=salario;
+    }
     
     // Getter y Setter para edad
     public int getEdad(){
