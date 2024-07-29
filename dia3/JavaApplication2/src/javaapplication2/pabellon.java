@@ -25,6 +25,20 @@ public class pabellon {
         this.oficioVariosCount = 0;
         this.pacientesCount = 0;
     }
+    
+    
+    public int getMedicoEnfermeroCount() {
+        return medicoEnfermeroCount;
+    }
+
+    public int getOficioVariosCount() {
+        return oficioVariosCount;
+    }
+
+    public int getPacientesCount() {
+        return pacientesCount;
+    }
+    
      // Getter y Setter para nombreSector
     public String getNombreSector() {
         return nombreSector;

@@ -44,16 +44,31 @@ public class JavaApplication2 {
         }
     }
     
-        public static void registroPabellon(){
-        System.out.println("Ingrese la cantidad de Medicos/enfermeros");
-        int cantMedicos = Integer.parseInt(scanner.nextLine());
-        System.out.println("Ingrese la cantidad de oficios Varios");
-        int cantOficios = Integer.parseInt(scanner.nextLine());
-        System.out.println("Ingrese la cantidad de pacientes");
-        int cantPacientes = Integer.parseInt(scanner.nextLine());
+    public static String ingresoString(String mensaje){
+        System.out.println(mensaje);
+        return scanner.nextLine();
+    }
+    
+    public static int ingresoInt(String mensaje){
+        System.out.println(mensaje);
+        int flag;
+        while(true){
+        try{
+            flag = Integer.parseInt(scanner.nextLine());
+            break;
+        }catch(Exception e){
+            System.out.println("tipo de dato incorrecto");
+        }
+        }
+        return flag;
+    }
+    
+    public static void registroPabellon(){
+        int cantMedicos = ingresoInt("Ingrese la cantidad de Medicos/enfermeros");
+        int cantOficios = ingresoInt("Ingrese la cantidad de oficios Varios");
+        int cantPacientes = ingresoInt("Ingrese la cantidad de pacientes");
         pabellon pabellon1 = new pabellon(cantMedicos, cantOficios, cantPacientes);
-        System.out.println("Ingrese el nombre del pabellon");
-        pabellon1.setNombreSector(scanner.nextLine());
+        pabellon1.setNombreSector(ingresoString("Ingrese el nombre del pabellon"));
         pabellones.add(pabellon1);
         mensajeAgregado();
     }
@@ -61,24 +76,17 @@ public class JavaApplication2 {
     public static void registroPersona(String tipo){
         persona persona1 = new persona();
         persona1.setTipo(tipo);
-        System.out.println("Ingrese le numero de identificacion:");
-        persona1.setIdentificacion(scanner.nextLine());        
-        System.out.println("Ingrese el nombre:");
-        persona1.setNombre(scanner.nextLine());
-        System.out.println("Ingrese el apellido 1");
-        persona1.setApellido1(scanner.nextLine());
-        System.out.println("Ingrese el apellido 2 o null");
-        persona1.setApellido2(scanner.nextLine());
-        System.out.println("Ingrese la direccion");
-        persona1.setDireccion(scanner.nextLine());
-        System.out.println("Ingrese la fecha de nacimiento (YYYY-MM-DD)");
-        persona1.setFechaNacimiento(scanner.nextLine());
-        System.out.println("la fecha de ingreso (YYYY-MM-DD)");
-        persona1.setFechaIngreso(scanner.nextLine());
-        persona1.setEdad(calculoEdad(persona1.getFechaNacimiento(),persona1.getFechaIngreso()));
-        if(tipo == "Medico/enfermero" || tipo == "oficio varios"){
-            System.out.println("Ingrese el salario:");
-            persona1.setSalario(Double.parseDouble(scanner.nextLine()));
+        persona1.setIdentificacion(ingresoString("Ingrese el numero de identificacion:"));
+        persona1.setNombre(ingresoString("Ingrese el nombre:"));
+        persona1.setApellido1(ingresoString("Ingrese el apellido 1:"));
+        persona1.setApellido2(ingresoString("Ingrese el apellido 2 o null:"));
+        persona1.setDireccion(ingresoString("Ingrese la direccion:"));
+        persona1.setFechaNacimiento(ingresoString("Ingrese la fecha de nacimiento (YYYY-MM-DD):"));
+        persona1.setFechaIngreso(ingresoString("Ingrese la fecha de ingreso (YYYY-MM-DD):"));
+        persona1.setEdad(calculoEdad(persona1.getFechaNacimiento(), persona1.getFechaIngreso()));
+
+        if (tipo.equals("Medico/enfermero") || tipo.equals("oficio varios")) {
+            persona1.setSalario(Double.parseDouble(ingresoString("Ingrese el salario:")));
         }
         personas.add(persona1);
         mensajeAgregado();
@@ -116,12 +124,15 @@ public class JavaApplication2 {
                     switch (tipoPersona) {
                         case "paciente":
                             pabellones.get(pb).addPacientes(identificacion);
+                            mensajeAgregado();
                             break;
                         case "oficio varios":
                             pabellones.get(pb).addOficioVarios(identificacion);
+                            mensajeAgregado();
                             break;
                         case "medico/enfermero":
                             pabellones.get(pb).addMedicoEnfermero(identificacion);
+                            mensajeAgregado();
                             break;
                         default:
                             System.out.println("Tipo no encontrado");
@@ -139,6 +150,7 @@ public class JavaApplication2 {
         }
 
     }
+   
     public static int indexPersona(String identificacion){
         int index = 0;
         for (persona persona : personas){
@@ -150,7 +162,7 @@ public class JavaApplication2 {
         return -1;
     }
     public static int indexPabellon(String nombre){
-         int index = 0;
+        int index = 0;
         for (pabellon pabellon : pabellones) {
             if (pabellon.getNombreSector().equalsIgnoreCase(nombre)) {
                 return index;
