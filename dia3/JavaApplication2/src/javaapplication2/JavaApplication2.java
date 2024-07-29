@@ -104,20 +104,51 @@ public class JavaApplication2 {
     }
     
     public static void asignarPabellon(){
-        if(pabellones.size()>0){
-            System.out.println("Ingrese el nombre del pabellon");
+        if (!pabellones.isEmpty()) {
+            System.out.println("Ingrese el nombre del pabellón:");
             int pb = indexPabellon(scanner.nextLine());
-            if(pb >= 0){
-                System.out.println(pabellones.get(pb).getNombreSector());
-            }else{
-                System.out.println("Pabellon no existe");
+            if (pb >= 0) {
+                System.out.println("Ingrese la identificación:");
+                int ps = indexPersona(scanner.nextLine());
+                if (ps >= 0) {
+                    String tipoPersona = personas.get(ps).getTipo().toLowerCase();
+                    String identificacion = personas.get(ps).getIdentificacion();
+                    switch (tipoPersona) {
+                        case "paciente":
+                            pabellones.get(pb).addPacientes(identificacion);
+                            break;
+                        case "oficio varios":
+                            pabellones.get(pb).addOficioVarios(identificacion);
+                            break;
+                        case "medico/enfermero":
+                            pabellones.get(pb).addMedicoEnfermero(identificacion);
+                            break;
+                        default:
+                            System.out.println("Tipo no encontrado");
+                            break;
+                    }
+                } else {
+                    System.out.println("Persona no encontrada");
+                }
+            } else {
+                System.out.println("Pabellón no existe");
                 asignarPabellon();
             }
-        }else{
-            System.out.println("No hay Pabellones por asignar");
+        } else {
+            System.out.println("No hay pabellones por asignar");
         }
+
     }
-    
+    public static int indexPersona(String identificacion){
+        int index = 0;
+        for (persona persona : personas){
+            if (persona.getIdentificacion().equalsIgnoreCase(identificacion)){
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
     public static int indexPabellon(String nombre){
          int index = 0;
         for (pabellon pabellon : pabellones) {
