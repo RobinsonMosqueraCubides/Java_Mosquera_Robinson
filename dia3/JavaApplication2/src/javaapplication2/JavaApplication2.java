@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.Period;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.util.Properties;
 /**
  *
  * @author Robinson Mosquera
@@ -21,6 +26,10 @@ public class JavaApplication2 {
     private static List<persona> personas = new ArrayList<>();
     private static List<pabellon> pabellones = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
+    private static Properties props = new Properties();
+    private static String url = props.getProperty("url");
+    private static String username = props.getProperty("username");
+    private static String password = props.getProperty("password");
     public static void main(String[] args) {
         // TODO code application logic here
         while(true){
@@ -37,10 +46,66 @@ public class JavaApplication2 {
                 }else if (Integer.parseInt(select) == 5) {
                     asignarPabellon();
                 }else if (Integer.parseInt(select) == 6) {
+                    conectarBaseDatos();
+                }else if (Integer.parseInt(select) == 7) {
                     break;
                 } else {
                     System.out.println("Selección no válida. Intente de nuevo.");
                 }
+        }
+    }
+    
+    public static void conectarBaseDatos(){
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        System.out.println(url);
+        try {
+            // Cargar el controlador JDBC
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establecer la conexión
+            connection = DriverManager.getConnection(url, username, password);
+
+            // Consulta SQL para insertar datos en la tabla persona
+            String sql = "INSERT INTO persona (nombre, apellido1, apellido2, fechaNacimiento, direccion, fechaIngreso, identificacion, salario, edad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            // Crear un PreparedStatement
+            preparedStatement = connection.prepareStatement(sql);
+
+            // Establecer los valores de los parámetros
+            preparedStatement.setString(1, "Robin");              // nombre
+            preparedStatement.setString(2, "Mosquera");             // apellido1
+            preparedStatement.setString(3, "Cubides");             // apellido2
+            preparedStatement.setString(4, "1995-05-15");        // fechaNacimiento
+            preparedStatement.setString(5, "Calle Rica 123");   // direccion
+            preparedStatement.setString(6, "2024-07-30");        // fechaIngreso
+            preparedStatement.setString(7, "123456789");         // identificacion
+            preparedStatement.setDouble(8, 45000.50);            // salario
+            preparedStatement.setInt(9, 44);                     // edad
+
+            // Ejecutar la consulta
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Comprobar si la inserción fue exitosa
+            if (rowsAffected > 0) {
+                System.out.println("Datos insertados exitosamente!");
+            } else {
+                System.out.println("No se insertaron datos.");
+            }
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error al cargar el controlador de MySQL: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error al conectar o insertar datos: " + e.getMessage());
+        } finally {
+            try {
+                // Cerrar el PreparedStatement y la conexión
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
     }
     
