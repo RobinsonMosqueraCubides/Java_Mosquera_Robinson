@@ -16,6 +16,14 @@ public abstract class Partido {
     protected boolean finalizado;
     protected Date fecha;
 
+    public String getEquipoLocal() {
+        return equipoLocal;
+    }
+
+    public String getEquipoVisitante() {
+        return equipoVisitante;
+    }
+    
     public Partido(String equipoLocal, String equipoVisitante, Date fecha) {
         this.equipoLocal = equipoLocal;
         this.equipoVisitante = equipoVisitante;
