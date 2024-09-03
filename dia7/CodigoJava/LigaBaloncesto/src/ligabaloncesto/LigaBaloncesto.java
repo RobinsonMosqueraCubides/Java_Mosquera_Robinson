@@ -6,6 +6,10 @@ package ligabaloncesto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 /**
  *
  * @author Robinson Mosquera
@@ -25,7 +29,8 @@ public class LigaBaloncesto {
             System.out.println("1. Registrar Partido de Liga");
             System.out.println("2. Registrar Partido de PlayOffs");
             System.out.println("3. Finalizar Partido");
-            System.out.println("4. Mostrar Información del Partido");
+            System.out.println("4. Registrar Equipo");
+            System.out.println("5. Mostrar Información del Partido");
             System.out.println("0. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
@@ -41,6 +46,9 @@ public class LigaBaloncesto {
                     finalizarPartido(scanner);
                     break;
                 case 4:
+                    DDBB(scanner);
+                    break;
+                case 5:
                     mostrarInformacionPartido(scanner);
                     break;
                 case 0:
@@ -52,7 +60,52 @@ public class LigaBaloncesto {
             }
         } while (opcion != 0);
     }
+    
+    private static void DDBB(Scanner scanner){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        String url = "jdbc:mysql://172.16.101.164:3306/ligaBaloncesto";
+        String username = "root";
+        String password = "1095827105";
+        try {
+            // Cargar el controlador JDBC
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
+            // Establecer la conexión
+            connection = DriverManager.getConnection(url, username, password);
+            
+            String sql = "INSERT INTO Equipo (Nombre, Lugar) VALUES (?,?)";
+            preparedStatement = connection.prepareStatement(sql);
+            
+            System.out.println("Ingrese el nombre del equipo");
+            preparedStatement.setString(1, scanner.next());
+            System.out.println("Ingrese el Lugar");
+            preparedStatement.setString(2, scanner.next());
+             // Ejecutar la consulta
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Comprobar si la inserción fue exitosa
+            if (rowsAffected > 0) {
+                System.out.println("Datos insertados exitosamente!");
+            } else {
+                System.out.println("No se insertaron datos.");
+            }
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error al cargar el controlador de MySQL: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error al conectar o insertar datos: " + e.getMessage());
+        } finally {
+            try {
+                // Cerrar el PreparedStatement y la conexión
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+    }
+    
     private static void registrarPartidoLiga(Scanner scanner) {
         System.out.println("Registrar Partido de Liga:");
         System.out.print("Equipo Local: ");
